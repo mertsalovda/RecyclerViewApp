@@ -14,6 +14,19 @@ import ru.mertsalovda.recyclerviewapp.mock.MockHolder;
 public class ContactsAdapter extends RecyclerView.Adapter<MockHolder> {
 
     private Cursor mCursor;
+    private OnItemClickListener mListener;
+
+    public void setmListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
+
+    public OnItemClickListener getmListener() {
+        return mListener;
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(String id);
+    }
 
     @NonNull
     @Override
@@ -34,6 +47,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<MockHolder> {
             int id = mCursor.getInt(mCursor.getColumnIndex(ContactsContract.Contacts._ID));
             //Помецаем объект в строку RecyclerView
             holder.bind(new Mock(name, id));
+            holder.setListener(mListener);
         }
     }
 

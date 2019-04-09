@@ -9,11 +9,11 @@ public class Mock {
         this.mValue = mValue;
     }
 
-    public String getmName() {
+    public String getName() {
         return mName;
     }
 
-    public String getmValue() {
+    public String getValue() {
         return String.valueOf(mValue);
     }
 

@@ -5,12 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import ru.mertsalovda.recyclerviewapp.ContactsAdapter;
 import ru.mertsalovda.recyclerviewapp.R;
 
 public class MockHolder extends RecyclerView.ViewHolder {
 
     private TextView mName;
     private TextView mVolue;
+    private String mId;
 
 
     public MockHolder(@NonNull View itemView) {
@@ -20,7 +22,17 @@ public class MockHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Mock mock) {
-        mName.setText(mock.getmName());
-        mVolue.setText(mock.getmValue());
+        mName.setText(mock.getName());
+        mVolue.setText(mock.getValue());
+        mId = mock.getValue();
+    }
+
+    public void setListener(final ContactsAdapter.OnItemClickListener listener) {
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onItemClick(mId);
+            }
+        });
     }
 }

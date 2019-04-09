@@ -1,5 +1,6 @@
 package ru.mertsalovda.recyclerviewapp;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -29,6 +30,22 @@ public class RecyclerFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     private Random random = new Random();
 
+    private ContactsAdapter.OnItemClickListener mListener;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof ContactsAdapter.OnItemClickListener){
+            mListener = (ContactsAdapter.OnItemClickListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        mListener = null;
+        super.onDetach();
+    }
+
     public static RecyclerFragment newInstance() {
         return new RecyclerFragment();
     }
@@ -54,45 +71,14 @@ public class RecyclerFragment extends Fragment implements SwipeRefreshLayout.OnR
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //Устанавливаю адаптер для RecyclerView
         recyclerView.setAdapter(mContactsAdapter);
-
+        mContactsAdapter.setmListener(mListener);
     }
 
     @Override
     public void onRefresh() {
-//        mSwipeRefreshLayout.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                //Эмитация дачного или неудачного события
-//                int count = random.nextInt(4);
-//
-//                if (count == 0){
-//                    showError();
-//                } else {
-//                    showData(count);
-//                }
-//                //Если тамп виден, то убрать
-//                if (mSwipeRefreshLayout.isRefreshing()){
-//                    mSwipeRefreshLayout.setRefreshing(false);
-//                }
-//            }
-//        }, 2000);
-
         getLoaderManager().restartLoader(0, null, this);
     }
 
-    //Показать данные
-//    private void showData(int count) {
-//        //Заполняю адаптер данными
-//        mockAdapter.addData(MockGenerator.generate(count), true);
-//        mErrorView.setVisibility(View.GONE);
-//        recyclerView.setVisibility(View.VISIBLE);
-//    }
-
-    //Показать ошибку
-//    private void showError() {
-//        mErrorView.setVisibility(View.VISIBLE);
-//        recyclerView.setVisibility(View.GONE);
-//    }
 
     @NonNull
     @Override
