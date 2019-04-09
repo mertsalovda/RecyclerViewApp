@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Random;
+
 import ru.mertsalovda.recyclerviewapp.mock.MockAdapter;
 import ru.mertsalovda.recyclerviewapp.mock.MockGenerator;
 
@@ -19,6 +21,10 @@ public class RecyclerFragment extends Fragment implements SwipeRefreshLayout.OnR
     private RecyclerView recyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private final MockAdapter mockAdapter = new MockAdapter();
+
+    private View mErrorView;
+
+    private Random random = new Random();
 
     public static RecyclerFragment newInstance() {
         return new RecyclerFragment();
@@ -36,6 +42,7 @@ public class RecyclerFragment extends Fragment implements SwipeRefreshLayout.OnR
         recyclerView = view.findViewById(R.id.recycler);
         mSwipeRefreshLayout = view.findViewById(R.id.refresher);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        mErrorView = view.findViewById(R.id.error_view);
     }
 
     @Override
@@ -52,12 +59,31 @@ public class RecyclerFragment extends Fragment implements SwipeRefreshLayout.OnR
         mSwipeRefreshLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //Заполняю адаптер данными
-                mockAdapter.addData(MockGenerator.generate(5), true);
+                //Эмитация дачного или неудачного события
+                int count = random.nextInt(4);
+
+                if (count == 0){
+                    showError();
+                } else {
+                    showData(count);
+                }
+                //Если тамп виден, то убрать
                 if (mSwipeRefreshLayout.isRefreshing()){
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }
         }, 2000);
+    }
+    //Показать данные
+    private void showData(int count) {
+        //Заполняю адаптер данными
+        mockAdapter.addData(MockGenerator.generate(count), true);
+        mErrorView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+    //Показать ошибку
+    private void showError() {
+        mErrorView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 }
