@@ -22,6 +22,5 @@ public class MockHolder extends RecyclerView.ViewHolder {
     public void bind(Mock mock) {
         mName.setText(mock.getmName());
         mVolue.setText(mock.getmValue());
-
     }
 }
