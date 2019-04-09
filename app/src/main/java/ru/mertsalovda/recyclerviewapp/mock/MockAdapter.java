@@ -19,10 +19,10 @@ public class MockAdapter extends RecyclerView.Adapter<MockHolder> {
     @NonNull
     @Override
     public MockHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-
+        //Получаю LayoutInflater из контекста
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-
-        View view = inflater.inflate(R.layout.list_item_mock, parent, false);
+        //Получаю элемент View с разметкой li_mock
+        View view = inflater.inflate(R.layout.li_mock, parent, false);
         return new MockHolder(view);
     }
 
@@ -33,10 +33,15 @@ public class MockAdapter extends RecyclerView.Adapter<MockHolder> {
 
     @Override
     public int getItemCount() {
+        //Количество элементов равно размеру листа
         return mMockList.size();
     }
 
-    public void addData(List<Mock> mocks){
+    public void addData(List<Mock> mocks, boolean refresh){
+        //Если false, то данные добавятся, а не обновятсья
+        if (refresh) {
+            mMockList.clear();
+        }
         mMockList.addAll(mocks);
         notifyDataSetChanged();
     }
